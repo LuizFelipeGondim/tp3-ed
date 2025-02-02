@@ -8,6 +8,7 @@ ArvoreIndices<T>::~ArvoreIndices() {
   destruirArvore(raiz);
 }
 
+// Método padrão de uma árvore AVL
 template <typename T>
 void ArvoreIndices<T>::destruirArvore(No* no) {
   if (no) {
@@ -17,16 +18,19 @@ void ArvoreIndices<T>::destruirArvore(No* no) {
   }
 }
 
+// Método padrão de uma árvore AVL
 template <typename T>
 int ArvoreIndices<T>::obterAltura(No* no) {
   return no ? no->altura : 0;
 }
 
+// Método padrão de uma árvore AVL
 template <typename T>
 int ArvoreIndices<T>::fatorBalanceamento(No* no) {
   return no ? obterAltura(no->esquerda) - obterAltura(no->direita) : 0;
 }
 
+// Método padrão de uma árvore AVL
 template <typename T>
 typename ArvoreIndices<T>::No* ArvoreIndices<T>::rotacaoDireita(No* y) {
   No* x = y->esquerda;
@@ -41,6 +45,7 @@ typename ArvoreIndices<T>::No* ArvoreIndices<T>::rotacaoDireita(No* y) {
   return x;
 }
 
+// Método padrão de uma árvore AVL
 template <typename T>
 typename ArvoreIndices<T>::No* ArvoreIndices<T>::rotacaoEsquerda(No* x) {
   No* y = x->direita;
@@ -55,6 +60,7 @@ typename ArvoreIndices<T>::No* ArvoreIndices<T>::rotacaoEsquerda(No* x) {
   return y;
 }
 
+// Método padrão de uma árvore AVL
 template <typename T>
 typename ArvoreIndices<T>::No* ArvoreIndices<T>::balancear(No* no) {
   int balance = fatorBalanceamento(no);
@@ -78,6 +84,7 @@ typename ArvoreIndices<T>::No* ArvoreIndices<T>::balancear(No* no) {
   return no;
 }
 
+// Método padrão de uma árvore AVL
 template <typename T>
 typename ArvoreIndices<T>::No* ArvoreIndices<T>::inserir(No* no, const T& chave, int indiceVoo) {
   if (!no) {
@@ -100,25 +107,52 @@ typename ArvoreIndices<T>::No* ArvoreIndices<T>::inserir(No* no, const T& chave,
   return balancear(no);
 }
 
+// Método padrão de uma árvore AVL
 template <typename T>
 void ArvoreIndices<T>::inserir(const T& chave, int indiceVoo) {
   raiz = inserir(raiz, chave, indiceVoo);
 }
 
+// Método que retorna os índices dos voos que atendem à consulta
 template <typename T>
-void ArvoreIndices<T>::percorrerEmOrdem(No* no) const {
-  if (no) {
-    percorrerEmOrdem(no->esquerda);
-    std::cout << no->chave << ": ";
-    for (int i = 0; i < no->indices.getSize(); ++i)
-      std::cout << no->indices[i] << " ";
-    
-    std::cout << std::endl;
-    percorrerEmOrdem(no->direita);
-  }
+Vector<int> ArvoreIndices<T>::buscar(T valor, std::string comparador) {
+  Vector<int> indicesEncontrados;
+
+  // Iniciar a busca recursiva a partir da raiz
+  buscarRecursivo(raiz, valor, comparador, indicesEncontrados);
+
+  return indicesEncontrados;
 }
 
+// Busca recursiva para fazer as consultas ao longo da árvore
 template <typename T>
-void ArvoreIndices<T>::mostrarEmOrdem() const {
-  percorrerEmOrdem(raiz);
+void ArvoreIndices<T>::buscarRecursivo(
+  No* no, 
+  const T& valor, 
+  const std::string& comparador, 
+  Vector<int>& indicesEncontrados
+) {
+  if (!no) return; // Se o nó for nulo, retorne
+
+  bool resultado = false;
+  if (comparador == "==") {
+    resultado = (no->chave == valor); // Comparação de igualdade
+  } else if (comparador == "<=") {
+    resultado = (no->chave <= valor); // Comparação menor ou igual
+  } else if (comparador == ">=") {
+    resultado = (no->chave >= valor); // Comparação maior ou igual
+  } else if (comparador == "<") {
+    resultado = (no->chave < valor); // Comparação menor
+  } else if (comparador == ">") {
+    resultado = (no->chave > valor); // Comparação maior
+  }
+
+  // Se o nó atender ao critério, adicionar seus índices ao vetor
+  if (resultado)
+    for (int i = 0; i < no->indices.getSize(); ++i)
+      indicesEncontrados.push(no->indices[i]);
+
+  // Continuar a busca na subárvore esquerda e direita
+  buscarRecursivo(no->esquerda, valor, comparador, indicesEncontrados);
+  buscarRecursivo(no->direita, valor, comparador, indicesEncontrados);
 }

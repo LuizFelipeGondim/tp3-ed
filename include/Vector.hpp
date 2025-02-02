@@ -11,6 +11,10 @@ private:
   int size;    // Tamanho lógico
   int tamMax;  // Capacidade máxima
 
+  void quickSort(int left, int right);
+  int partition(int left, int right);
+  void swap(int a, int b);  
+
 public:
   Vector();
   Vector(int tamMax);
@@ -38,6 +42,7 @@ public:
   // Métodos utilitários
   int getSize() const;
   int getTamMax() const;
+  void sort();
 };
 
 #include "Vector.tpp"

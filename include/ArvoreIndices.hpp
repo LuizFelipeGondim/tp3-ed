@@ -3,9 +3,12 @@
 
 #include "Vector.hpp"
 
+// Arvore AVL que armazena um determinado tipo de atributo do voo
+// Em cada nó, um atributo está associado a um vetor de indices com os voos que possuem esse atributo
 template <typename T>
 class ArvoreIndices {
 private:
+
   struct No {
     T chave;
     Vector<int> indices; // Vetor com índices dos voos que possuem essa chave
@@ -18,21 +21,27 @@ private:
 
   No* raiz;
 
-  No* inserir(No* no, const T& chave, int indiceVoo);
-  No* balancear(No* no);
+  void destruirArvore(No* no);
   int obterAltura(No* no);
   int fatorBalanceamento(No* no);
   No* rotacaoDireita(No* y);
   No* rotacaoEsquerda(No* x);
-  void destruirArvore(No* no);
-  void percorrerEmOrdem(No* no) const;
+  No* balancear(No* no);
+  No* inserir(No* no, const T& chave, int indiceVoo);
+
+  void buscarRecursivo(
+    No* no, 
+    const T& valor, 
+    const std::string& comparador, 
+    Vector<int>& indicesEncontrados
+  ); 
 
 public:
   ArvoreIndices();
   ~ArvoreIndices();
 
   void inserir(const T& chave, int indiceVoo);
-  void mostrarEmOrdem() const;
+  Vector<int> buscar(T valor, std::string comparador);
 };
 
 #include "ArvoreIndices.tpp" 

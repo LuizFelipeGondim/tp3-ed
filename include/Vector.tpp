@@ -142,3 +142,44 @@ template <typename T>
 int Vector<T>::getTamMax() const {
   return tamMax;
 }
+
+// Função auxiliar swap
+template <typename T>
+void Vector<T>::swap(int a, int b) {
+  T temp = data[a];
+  data[a] = data[b];
+  data[b] = temp;
+}
+
+// Método iniciar a ordecação do vetor utilizando quicksort
+template <typename T>
+void Vector<T>::sort() {
+  if (size > 1) 
+    quickSort(0, size - 1);
+}
+
+// Método privado de QuickSort
+template <typename T>
+void Vector<T>::quickSort(int left, int right) {
+  if (left < right) {
+    int pivotIndex = partition(left, right);
+    quickSort(left, pivotIndex - 1);
+    quickSort(pivotIndex + 1, right);
+  }
+}
+
+// Particiona o vetor para o QuickSort
+template <typename T>
+int Vector<T>::partition(int left, int right) {
+  T pivot = data[right];
+  int i = left - 1; 
+
+  for (int j = left; j < right; ++j) {
+    if (data[j] <= pivot) { 
+      ++i;
+      swap(i, j);
+    }
+  }
+  swap(i + 1, right);
+  return i + 1;
+}

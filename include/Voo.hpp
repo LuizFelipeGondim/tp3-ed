@@ -5,6 +5,7 @@
 #include <string>
 #include <ctime>
 
+// Classe responsável por representar cada voo
 class Voo {
 private:
   std::string origem;
@@ -15,6 +16,9 @@ private:
   std::time_t dataHoraChegada;
   std::time_t duracaoVoo;
   int numeroParadas;
+
+  // Função auxiliar para formatar data/hora
+  std::string formatarHorario(std::time_t dataHora) const;
 
 public:
   
@@ -31,9 +35,9 @@ public:
   // Exibe os dados formatados
   void mostrarVoo() const;
 
-private:
-  // Função auxiliar para formatar data/hora
-  std::string formatarHorario(std::time_t dataHora) const;
+  float getPreco() const;
+  time_t getDuracao() const;
+  int getNumeroParadas() const;
 };
 
 #endif
